@@ -11,13 +11,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
-    - uses: chrislennon/action-aws-cli@v1.1
+    - uses: actions/checkout@v2
+    - uses: aws-actions/configure-aws-credentials@v1
       with:
         node-version: '16'
-    - run: npm install --save react react-dom
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+    - run: npm ci
     - run: npm run build
     - run: aws sts get-caller-identity
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     
